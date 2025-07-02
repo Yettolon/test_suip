@@ -1,4 +1,4 @@
-from typing import List, Sequence
+from typing import List, Optional, Sequence
 from fastapi import UploadFile, File
 from fastapi import APIRouter
 
@@ -30,6 +30,14 @@ async def parse_endpoint(file: UploadFile = File(...)) -> SuipDataRead:
 
 
 @router.get("", response_model=List[SuipDataRead])
-async def get_saved_data() -> Sequence[SuipData]:
-    data_list: Sequence[SuipData] = await list_suip_data()
+async def get_saved_data(
+    filename: Optional[str] = None,
+    file_type: Optional[str] = None,
+    mime_type: Optional[str] = None,
+) -> Sequence[SuipData]:
+    data_list: Sequence[SuipData] = await list_suip_data(
+        filename=filename,
+        file_type=file_type,
+        mime_type=mime_type,
+    )
     return data_list

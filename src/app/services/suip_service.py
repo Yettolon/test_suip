@@ -1,7 +1,9 @@
 import re
-from typing import Sequence
+from typing import Optional, Sequence
 from bs4 import BeautifulSoup
 from sqlalchemy.future import select
+from sqlalchemy import select, and_
+
 
 from src.app.db.models import SuipData
 from src.app.db.database import AsyncSessionLocal
@@ -75,8 +77,26 @@ async def save_suip_data(data: dict, raw_html: str) -> SuipData:
         return obj
 
 
-async def list_suip_data() -> Sequence[SuipData]:
-    """Возвращает список всех сохраненных данных из базы данных."""
+async def list_suip_data(
+    filename: Optional[str] = None,
+    file_type: Optional[str] = None,
+    mime_type: Optional[str] = None,
+) -> Sequence[SuipData]:
+    """Получает список сохраненных данных с возможностью фильтрации по
+    имени файла, типу файла и MIME-типу."""
     async with AsyncSessionLocal() as session:
-        result = await session.execute(select(SuipData))
+        query = select(SuipData)
+
+        filters = []
+        if filename:
+            filters.append(SuipData.filename.ilike(f"%{filename}%"))
+        if file_type:
+            filters.append(SuipData.file_type == file_type)
+        if mime_type:
+            filters.append(SuipData.mime_type == mime_type)
+
+        if filters:
+            query = query.where(and_(*filters))
+
+        result = await session.execute(query)
         return result.scalars().all()

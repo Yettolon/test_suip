@@ -1,0 +1,19 @@
+# Platform and IDE-generated files
+.DS_Store
+.idea
+.project
+.pydevproject
+.vscode
+.devcontainer
+.venv
+
+*.bak
+# Python-related ignores
+*.pyc
+*.pyo
+__pycache__
+*.pyd
+*.egg
+*.egg-info
+.env
+.mypy_cache

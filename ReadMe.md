@@ -30,4 +30,3 @@ docker compose up --build
   - **Через Docker**: Используйте `docker compose up --build` для запуска.
   - **Локально**: Требуется Python 3.11+ и установка зависимостей из `requirements.txt` (`pip install -r requirements.txt`).
 - **Контроль качества кода**: Настроен `pre-commit` с линтерами и проверкой типов (`mypy`, `flake8`, `black`).
-- **Сохранение в json** не сделано. Смысла нет хранить лишние json файлы на сервере, когда данные есть в Базе Данных.
